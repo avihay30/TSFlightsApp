@@ -9,17 +9,23 @@
           <div class="search_box">
             <select [(ngModel)]="selectedOrigin">
               <option value="" disabled selected>from</option>
-              <option value="nyc">New York</option>
-              <option value="london">London</option>
-              <option value="lax">Los Angeles</option>
+              <option
+                *ngFor="let result of filteredOriginList"
+                value="{{ result.origin }}"
+              >
+                {{ result.origin }}
+              </option>
             </select>
           </div>
           <div class="search_box">
             <select [(ngModel)]="selectedDestination">
               <option value="" disabled selected>to</option>
-              <option value="nyc">New York</option>
-              <option value="london">London</option>
-              <option value="lax">Los Angeles</option>
+              <option
+                *ngFor="let result of filteredDestinationList"
+                value="{{ result.destination }}"
+              >
+                {{ result.destination }}
+              </option>
             </select>
           </div>
           <div class="search_box">

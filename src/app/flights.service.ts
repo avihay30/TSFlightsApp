@@ -26,4 +26,12 @@ export class FlightsService {
   }
 
   deleteFlight(id: number) {}
+
+  getAllOrigins(): Observable<any> {
+    return this.http.get(`${this.flightsApiUrl}/cities/origins`);
+  }
+
+  getAllDestinations(): Observable<any> {
+    return this.http.get(`${this.flightsApiUrl}/cities/destinations`);
+  }
 }

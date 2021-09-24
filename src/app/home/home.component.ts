@@ -8,15 +8,25 @@ import { FlightsService } from '../flights.service';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  flights: Flight[] = [];
-  selectedOrigin: string = '';
-  selectedDestination: string = '';
+  flights!: Flight[];
+  filteredOriginList!: any[];
+  filteredDestinationList!: any[];
+  selectedOrigin!: string;
+  selectedDestination!: string;
 
   constructor(private flightsService: FlightsService) {}
 
   ngOnInit(): void {
     this.flightsService.getFlights().subscribe((data: Flight[]) => {
       this.flights = data;
+    });
+
+    this.flightsService.getAllOrigins().subscribe((data: string[]) => {
+      this.filteredOriginList = data;
+    });
+
+    this.flightsService.getAllDestinations().subscribe((data: string[]) => {
+      this.filteredDestinationList = data;
     });
   }
 
