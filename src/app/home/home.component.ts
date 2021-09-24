@@ -13,6 +13,8 @@ export class HomeComponent implements OnInit {
   constructor(private flightsService: FlightsService) {}
 
   ngOnInit(): void {
-    this.flights = this.flightsService.getFlights();
+    this.flightsService.getFlights().subscribe((data: Flight[]) => {
+      this.flights = data;
+    });
   }
 }
