@@ -7,7 +7,7 @@
       <div class="container">
         <div class="search_pane">
           <div class="search_box">
-            <select>
+            <select [(ngModel)]="selectedOrigin">
               <option value="" disabled selected>from</option>
               <option value="nyc">New York</option>
               <option value="london">London</option>
@@ -15,7 +15,7 @@
             </select>
           </div>
           <div class="search_box">
-            <select>
+            <select [(ngModel)]="selectedDestination">
               <option value="" disabled selected>to</option>
               <option value="nyc">New York</option>
               <option value="london">London</option>
@@ -23,7 +23,7 @@
             </select>
           </div>
           <div class="search_box">
-            <button>Go</button>
+            <button (click)="query()">Go</button>
           </div>
         </div>
         <div class="flight_pane">
@@ -37,10 +37,10 @@
           <div *ngFor="let flight of flights" class="flight_results">
             <div class="flight_number cell">{{ flight.flightNumber }}</div>
             <div class="departs cell">
-              {{ flight.depart | date: "shortDate" }}
+              {{ flight.depart | date: 'd/M/yy' }}
             </div>
             <div class="arrives cell">
-              {{ flight.arrive | date: "shortDate" }}
+              {{ flight.arrive | date: 'd/M/yy' }}
             </div>
             <div class="nonstop cell">{{ flight.isNonstop }}</div>
           </div>
