@@ -7,34 +7,32 @@
       <div class="container">
         <div class="search_pane">
           <div class="search_box">
+            <span class="selectTitle">From:</span>
             <select [(ngModel)]="selectedOrigin">
-              <option value="" disabled selected>from</option>
-              <option
-                *ngFor="let result of filteredOriginList"
-                value="{{ result.origin }}"
-              >
-                {{ result.origin }}
+              <option *ngFor="let origin of filteredOriginList" value="{{ origin }}">
+                {{ origin }}
               </option>
             </select>
           </div>
           <div class="search_box">
+            <span class="selectTitle">To:</span>
             <select [(ngModel)]="selectedDestination">
-              <option value="" disabled selected>to</option>
               <option
-                *ngFor="let result of filteredDestinationList"
-                value="{{ result.destination }}"
+                *ngFor="let destination of filteredDestinationList"
+                value="{{ destination }}"
               >
-                {{ result.destination }}
+                {{ destination }}
               </option>
             </select>
           </div>
           <div class="search_box">
-            <button (click)="query()">Go</button>
+            <button (click)="query()">Search</button>
           </div>
         </div>
         <div class="flight_pane">
           <div class="flight_headers">
             <div class="flight_number cell">Flight #</div>
+            <div class="flight_path cell">origin -> destination</div>
             <div class="departs cell">Departs</div>
             <div class="arrives cell">Arrives</div>
             <div class="nonstop cell">Nonstop</div>
@@ -42,6 +40,7 @@
 
           <div *ngFor="let flight of flights" class="flight_results">
             <div class="flight_number cell">{{ flight.flightNumber }}</div>
+            <div class="flight_path cell">{{ flight.origin }} -> {{flight.destination}} </div>
             <div class="departs cell">
               {{ flight.depart | date: 'd/M/yy' }}
             </div>

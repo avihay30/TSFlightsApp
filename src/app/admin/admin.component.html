@@ -7,10 +7,11 @@
   <input type="date" [(ngModel)]="depart" />
   <span>arrive:</span>
   <input type="date" [(ngModel)]="arrive" />
-  <span>nonstop:</span>
-  <input type="checkbox" (click)="toggleNonStop()" />
-
-  <button (click)="sendFlight()">create flight</button>
+  <span
+    >nonstop:
+    <input class="nonstop_input" type="checkbox" (click)="toggleNonStop()" />
+  </span>
+  <button class="create_btn" (click)="sendFlight()">create flight</button>
 </div>
 
 <div class="editPanel">

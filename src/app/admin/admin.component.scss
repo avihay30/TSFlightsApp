@@ -21,6 +21,15 @@
   span {
     font-size: 0.9em;
     margin-top: 10px;
+    display: flex;
+  }
+
+  .nonstop_input {
+    width: auto;
+  }
+
+  .create_btn {
+    margin-top: 10px;
   }
 }
 

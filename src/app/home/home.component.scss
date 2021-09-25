@@ -24,10 +24,7 @@
     }
 
     .transparent_bg {
-      background: linear-gradient(
-        rgba(255, 255, 255, 0.5),
-        rgba(255, 255, 255, 0.5)
-      );
+      background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5));
       height: auto;
       min-height: 400px;
       width: 100%;
@@ -44,18 +41,23 @@
         justify-content: center;
         .search_pane {
           margin-top: 20px;
+          margin-right: 40px;
           width: 80%;
           height: 80%;
           display: flex;
           flex-direction: row;
+          align-items: flex-end;
           .search_box {
             display: flex;
             flex-direction: column;
             margin-right: 10px;
             position: relative;
+            .selectTitle {
+              justify-content: start;
+              font-size: 12px;
+            }
             select {
               position: relative;
-              right: 20px;
               background-color: white;
               box-shadow: 2px 2px 2px grey;
               width: auto;
@@ -96,6 +98,13 @@
 
           .cell {
             flex: 1;
+          }
+
+          .flight_path {
+            flex: 2;
+            @media screen and (max-width: 550px) {
+              display: none;
+            }
           }
         }
       }
