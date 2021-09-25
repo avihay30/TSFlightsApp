@@ -8,6 +8,9 @@ import { FlightsService } from '../flights.service';
   styleUrls: ['./admin.component.scss'],
 })
 export class AdminComponent implements OnInit {
+  flightList!: Flight[];
+
+  // New flight fields
   origin!: string;
   destination!: string;
   flightNumber!: number;
@@ -17,7 +20,15 @@ export class AdminComponent implements OnInit {
 
   constructor(private flightService: FlightsService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.refresh();
+  }
+
+  refresh() {
+    this.flightService.getAllFlights().subscribe((data: Flight[]) => {
+      this.flightList = data;
+    });
+  }
 
   toggleNonStop() {
     this.isNonstop = !this.isNonstop;
@@ -33,5 +44,25 @@ export class AdminComponent implements OnInit {
       isNonstop: this.isNonstop,
     };
     this.flightService.postFlight(flight);
+  }
+
+  update(flight: Flight) {
+    this.flightService.updateFlight(flight).subscribe((data) => {
+      console.log(data);
+      
+      if (data) {
+        this.refresh();
+      }
+    });
+  }
+
+  delete(flight: Flight) {
+    if (window.confirm(`Are you sure you want to delete flight #${flight.flightNumber}?`)) {
+      this.flightService.deleteFlight(flight).subscribe((data) => {
+        if (data) {
+          this.refresh();
+        }
+      });
+    }
   }
 }
