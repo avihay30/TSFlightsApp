@@ -1,50 +1,66 @@
 <div class="outer_container">
   <div class="big_container">
     <div class="top_bar">
-      <span>Find Flights</span>
+      <div class="notice">
+        Find Flights
+        <div class="sub-text animated" *ngIf="loading && !loadingError">
+          LOADING FLIGHTS, PLEASE WAIT !
+        </div>
+        <div class="sub-text" *ngIf="loadingError">
+          CAN'T LOAD FLIGHTS! TRY AGAIN LATER. (servers might be down)
+        </div>
+      </div>
     </div>
     <div class="transparent_bg">
       <div class="container">
         <div class="search_pane">
           <div class="search_box">
-            <select>
-              <option value="" disabled selected>from</option>
-              <option value="nyc">New York</option>
-              <option value="london">London</option>
-              <option value="lax">Los Angeles</option>
+            <span class="selectTitle">From:</span>
+            <select [(ngModel)]="selectedOrigin">
+              <option *ngFor="let origin of filteredOriginList" value="{{ origin }}">
+                {{ origin }}
+              </option>
             </select>
           </div>
           <div class="search_box">
-            <select>
-              <option value="" disabled selected>to</option>
-              <option value="nyc">New York</option>
-              <option value="london">London</option>
-              <option value="lax">Los Angeles</option>
+            <span class="selectTitle">To:</span>
+            <select [(ngModel)]="selectedDestination">
+              <option
+                *ngFor="let destination of filteredDestinationList"
+                value="{{ destination }}"
+              >
+                {{ destination }}
+              </option>
             </select>
           </div>
           <div class="search_box">
-            <button>Go</button>
+            <button (click)="query()">Search</button>
           </div>
         </div>
         <div class="flight_pane">
           <div class="flight_headers">
             <div class="flight_number cell">Flight #</div>
+            <div class="flight_path cell">origin -> destination</div>
             <div class="departs cell">Departs</div>
             <div class="arrives cell">Arrives</div>
             <div class="nonstop cell">Nonstop</div>
           </div>
 
+          <div *ngIf="noFlightsFound">-- no flights found --</div>
+
           <div *ngFor="let flight of flights" class="flight_results">
             <div class="flight_number cell">{{ flight.flightNumber }}</div>
+            <div class="flight_path cell">
+              {{ flight.origin }} -> {{ flight.destination }}
+            </div>
             <div class="departs cell">
-              {{ flight.depart | date: "shortDate" }}
+              {{ flight.depart | date: 'd/M/yy' }}
             </div>
             <div class="arrives cell">
-              {{ flight.arrive | date: "shortDate" }}
+              {{ flight.arrive | date: 'd/M/yy' }}
             </div>
             <div class="nonstop cell">{{ flight.isNonstop }}</div>
           </div>
-          <div></div>
         </div>
       </div>
     </div>
