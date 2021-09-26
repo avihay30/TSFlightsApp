@@ -18,8 +18,28 @@
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      span {
+      div.notice {
         margin-left: 20px;
+        div.sub-text {
+          font-size: 0.6em;
+          color: red;
+        }
+
+        .animated {
+          animation: blink 1.4s linear 5;
+        }
+
+        @keyframes blink {
+          0% {
+            opacity: 0;
+          }
+          50% {
+            opacity: 0.5;
+          }
+          100% {
+            opacity: 1;
+          }
+        }
       }
     }
 
@@ -40,8 +60,7 @@
         align-items: center;
         justify-content: center;
         .search_pane {
-          margin-top: 20px;
-          margin-right: 40px;
+          margin: 20px 40px 0 0;
           width: 80%;
           height: 80%;
           display: flex;

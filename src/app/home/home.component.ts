@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Flight } from '../flight.model';
 import { FlightsService } from '../flights.service';
 
@@ -10,7 +11,10 @@ import { FlightsService } from '../flights.service';
 export class HomeComponent implements OnInit {
   static readonly selectedDefault = 'All';
 
-  flights!: Flight[];
+  loading = true;
+  loadingError = false;
+  noFlightsFound = false;
+  flights: Flight[] = [];
   filteredOriginList: string[];
   filteredDestinationList: string[];
   selectedOrigin!: string;
@@ -24,37 +28,47 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.flightsService.getAllFlights().subscribe((data: Flight[]) => {
-      this.flights = data;
-    });
+    this.query();
 
-    this.flightsService.getAllOrigins().subscribe((data: Flight[]) => {
-      const origins = data.map((flight: Flight) => flight.origin);
-      this.filteredOriginList = this.filteredOriginList.concat(origins);
-    });
+    this.flightsService.getAllOrigins().subscribe(
+      (data: Flight[]) => {
+        const origins = data.map((flight: Flight) => flight.origin);
+        this.filteredOriginList = this.filteredOriginList.concat(origins);
+        this.loading = this.loadingError = false;
+      },
+      (err) => (this.loadingError = true),
+    );
 
-    this.flightsService.getAllDestinations().subscribe((data: Flight[]) => {
-      const destinations = data.map((flight: Flight) => flight.destination);
-      this.filteredDestinationList = this.filteredDestinationList.concat(destinations);
-    });
+    this.flightsService.getAllDestinations().subscribe(
+      (data: Flight[]) => {
+        const destinations = data.map((flight: Flight) => flight.destination);
+        this.filteredDestinationList = this.filteredDestinationList.concat(destinations);
+        this.loading = this.loadingError = false;
+      },
+      (err) => (this.loadingError = true),
+    );
   }
 
   // TBD: add query for all to one and vice versa
   query(): void {
-    const selectedDefault = HomeComponent.selectedDefault;
+    this.noFlightsFound = false;
     const origin = this.selectedOrigin;
     const destination = this.selectedDestination;
-    const isNotEmpty = origin && destination;
+    const selectedDefault = HomeComponent.selectedDefault;
     const isDefault = origin == selectedDefault && destination == selectedDefault;
+    let subscription: Observable<any>;
+
     if (isDefault) {
-      this.flightsService
-        .getAllFlights()
-        .subscribe((data: Flight[]) => (this.flights = data));
+      subscription = this.flightsService.getAllFlights();
+    } else {
+      subscription = this.flightsService.getQueriedFlights(origin, destination);
     }
-    else if (isNotEmpty) {
-      this.flightsService
-        .getQueriedFlights(origin, destination)
-        .subscribe((data: Flight[]) => (this.flights = data));
-    }
+
+    subscription.subscribe((data: Flight[]) => {
+      this.flights = data;
+      if (!this.flights.length) {
+        this.noFlightsFound = true;
+      }
+    });
   }
 }
