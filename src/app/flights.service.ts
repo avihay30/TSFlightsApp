@@ -11,8 +11,8 @@ export class FlightsService {
 
   constructor(private http: HttpClient) {}
 
-  // TBD: Add http response validations.
-  //      Add { observe: 'response' } to http call passed params
+  // TODO: Add http response validations.
+  //     Add { observe: 'response' } to http call passed params
 
   getAllFlights(): Observable<any> {
     return this.http.get(this.flightsApiUrl);

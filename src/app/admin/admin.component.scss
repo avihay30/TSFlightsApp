@@ -1,6 +1,5 @@
 .admin_panel {
   font-size: 1.1em;
-  font-family: Arial, Helvetica, sans-serif;
   margin: 10px auto;
   background-color: white;
   border: 1px solid grey;
@@ -39,7 +38,6 @@
 
 .editPanel,
 .notice-panel {
-  font-family: Arial, Helvetica, sans-serif;
   margin: 10px;
   background-color: #ddd;
   border: 1px solid grey;
@@ -72,7 +70,7 @@
     }
 
     .columnTitle {
-      font-size: 120%;
+      font-size: 140%;
       font-weight: bold;
     }
   }

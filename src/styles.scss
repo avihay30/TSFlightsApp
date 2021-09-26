@@ -1,11 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
+html,
+body {
+  height: 100%;
+}
 
 body {
   margin: 0;
   padding: 0;
   width: 100vw;
   height: 100vh;
-  background: url("assets/mountains.jpeg");
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  background: url('assets/mountains.jpeg');
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -19,7 +23,7 @@ header {
   align-items: center;
   justify-content: space-between;
   .logo_box {
-    background-image: url("assets/TsFlightsHorizLogo.jpg");
+    background-image: url('assets/TsFlightsHorizLogo.jpg');
     height: 80px;
     width: 250px;
     background-repeat: no-repeat;
@@ -52,7 +56,6 @@ header {
       text-align: center;
       @media screen and (max-width: 480px) {
         width: 60px;
-        // margin-right: 5px;
       }
     }
   }

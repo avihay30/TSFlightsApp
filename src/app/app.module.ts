@@ -7,10 +7,11 @@ import { HomeComponent } from './home/home.component';
 import { AdminComponent } from './admin/admin.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, AdminComponent],
-  imports: [BrowserModule, AppRoutingModule, FormsModule ,HttpClientModule],
+  imports: [BrowserModule, AppRoutingModule, FormsModule ,HttpClientModule, BrowserAnimationsModule],
   providers: [],
   bootstrap: [AppComponent],
 })
