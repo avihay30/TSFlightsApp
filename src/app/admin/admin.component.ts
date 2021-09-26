@@ -8,9 +8,14 @@ import { FlightsService } from '../flights.service';
   styleUrls: ['./admin.component.scss'],
 })
 export class AdminComponent implements OnInit {
+  private static readonly serverErrorMes =
+    "CAN'T LOAD FLIGHTS! TRY AGAIN LATER. (servers might be down)";
+
+  loading = true;
+  loadingMessage = 'LOADING FLIGHTS, PLEASE WAIT';
   flightList!: Flight[];
 
-  // New flight fields
+  // newFlight fields
   origin!: string;
   destination!: string;
   flightNumber!: number;
@@ -25,9 +30,15 @@ export class AdminComponent implements OnInit {
   }
 
   refresh() {
-    this.flightService.getAllFlights().subscribe((data: Flight[]) => {
-      this.flightList = data;
-    });
+    this.loading = true;
+    this.flightService.getAllFlights().subscribe(
+      (data: Flight[]) => {
+        this.flightList = data;
+        this.loading = false;
+      },
+      (err) =>
+        (this.loadingMessage = AdminComponent.serverErrorMes),
+    );
   }
 
   toggleNonStop() {
@@ -49,7 +60,7 @@ export class AdminComponent implements OnInit {
   update(flight: Flight) {
     this.flightService.updateFlight(flight).subscribe((data) => {
       console.log(data);
-      
+
       if (data) {
         this.refresh();
       }
@@ -57,7 +68,9 @@ export class AdminComponent implements OnInit {
   }
 
   delete(flight: Flight) {
-    if (window.confirm(`Are you sure you want to delete flight #${flight.flightNumber}?`)) {
+    if (
+      window.confirm(`Are you sure you want to delete flight #${flight.flightNumber}?`)
+    ) {
       this.flightService.deleteFlight(flight).subscribe((data) => {
         if (data) {
           this.refresh();
