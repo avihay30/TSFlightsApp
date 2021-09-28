@@ -1,0 +1,99 @@
+<div class="mat-elevation-z8">
+  <form class="example-form">
+    <mat-form-field class="flights-fliter" appearance="fill">
+      <mat-label>Search flight from</mat-label>
+      <input matInput placeholder="Ex. Israel" #originInput />
+    </mat-form-field>
+    <mat-icon>arrow_forward</mat-icon>
+    <mat-form-field class="flights-fliter" appearance="fill">
+      <mat-label>To</mat-label>
+      <input matInput placeholder="Ex. NewYork" #destinationInput />
+    </mat-form-field>
+
+    <button mat-raised-button (click)="searchFlights()">Search</button>
+  </form>
+
+  <div class="spinner-container" *ngIf="dataSource.loading$ | async">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <mat-table
+    class="full-width-table"
+    [dataSource]="dataSource"
+    matSort
+    matSortActive="flightNumber"
+    matSortDirection="asc"
+    aria-label="Elements"
+  >
+    <!-- FlightNumber Column -->
+    <ng-container matColumnDef="flightNumber">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>flightNumber#</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.flightNumber }}</mat-cell>
+    </ng-container>
+
+    <!-- Origin Column -->
+    <ng-container matColumnDef="origin">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Origin</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.origin }}</mat-cell>
+    </ng-container>
+
+    <!-- Destination Column -->
+    <ng-container matColumnDef="destination">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>destination</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.destination }}</mat-cell>
+    </ng-container>
+
+    <!-- Depart Column -->
+    <ng-container matColumnDef="depart">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>depart</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.depart | date: 'd/M/yy' }}</mat-cell>
+    </ng-container>
+
+    <!-- Arrive Column -->
+    <ng-container matColumnDef="arrive">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>arrive</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.arrive | date: 'd/M/yy' }}</mat-cell>
+    </ng-container>
+
+    <!-- IsNonstop Column -->
+    <ng-container matColumnDef="isNonstop">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>isNonstop</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-icon>{{ row.isNonstop? 'done' :  'close'}}</mat-icon>
+      </mat-cell>
+    </ng-container>
+    <!-- Edit Column -->
+    <ng-container matColumnDef="edit">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <button mat-icon-button color="accent">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Edit Column -->
+    <ng-container matColumnDef="delete">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <button mat-icon-button color="warn">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+
+  <!-- [length]="dataSource?.data?.length" -->
+  <mat-paginator
+    #paginator
+    [length]="flights?.length"
+    [pageIndex]="0"
+    [pageSize]="3"
+    [pageSizeOptions]="[1, 3, 5]"
+    aria-label="Select page"
+  >
+  </mat-paginator>
+</div>
