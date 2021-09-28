@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Flight } from '../flight.model';
-import { FlightsService } from '../flights.service';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTable } from '@angular/material/table';
+import { Flight } from '../model/flight.model';
+import { FlightsService } from '../services/flights.service';
 
 @Component({
   selector: 'app-admin',
@@ -21,7 +24,7 @@ export class AdminComponent implements OnInit {
   flightNumber!: number;
   depart!: Date;
   arrive!: Date;
-  isNonstop!: boolean;
+  isNonstop: boolean = false;
 
   constructor(private flightService: FlightsService) {}
 
@@ -36,8 +39,7 @@ export class AdminComponent implements OnInit {
         this.flightList = data;
         this.loading = false;
       },
-      (err) =>
-        (this.loadingMessage = AdminComponent.serverErrorMes),
+      (err) => (this.loadingMessage = AdminComponent.serverErrorMes),
     );
   }
 

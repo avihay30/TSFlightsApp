@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Flight } from '../flight.model';
-import { FlightsService } from '../flights.service';
+import { Flight } from '../model/flight.model';
+import { FlightsService } from '../services/flights.service';
 
 @Component({
   selector: 'app-home',
