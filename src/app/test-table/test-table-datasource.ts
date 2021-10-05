@@ -103,7 +103,7 @@ export class TestTableDataSource implements DataSource<Flight> {
   ) {
     let serviceSubscription = this.flightService.getAllFlights();
     this.loadingSubject.next(true);
-    if (query !== this.defaultQuery) {
+    if (query !== undefined && query !== this.defaultQuery) {
       serviceSubscription = this.flightService.getQueriedFlights(
         query.origin,
         query.destination,

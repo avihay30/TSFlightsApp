@@ -1,3 +1,22 @@
 .full-width-table {
   width: 100%;
+
+  .row-form {
+    .editable-input {
+      color: blue;
+    }
+  }
+  // TODO: fix date wrap 
+  .dataPicker {
+    color: blue;
+    flex-wrap: wrap;
+  }
 }
+// div.mat-form-field-flex {
+//   display: inline-flex;
+//   align-items: baseline;
+//   box-sizing: border-box;
+//   width: 100%;
+//   flex-wrap: wrap;
+//   color: blue;
+// }

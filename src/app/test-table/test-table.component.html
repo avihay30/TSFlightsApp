@@ -2,12 +2,12 @@
   <form class="example-form">
     <mat-form-field class="flights-fliter" appearance="fill">
       <mat-label>Search flight from</mat-label>
-      <input matInput placeholder="Ex. Israel" #originInput />
+      <input matInput placeholder="Ex. Israel" #originSearchInput />
     </mat-form-field>
     <mat-icon>arrow_forward</mat-icon>
     <mat-form-field class="flights-fliter" appearance="fill">
       <mat-label>To</mat-label>
-      <input matInput placeholder="Ex. NewYork" #destinationInput />
+      <input matInput placeholder="Ex. NewYork" #destinationSearchInput />
     </mat-form-field>
 
     <button mat-raised-button (click)="searchFlights()">Search</button>
@@ -28,45 +28,90 @@
     <!-- FlightNumber Column -->
     <ng-container matColumnDef="flightNumber">
       <mat-header-cell *matHeaderCellDef mat-sort-header>flightNumber#</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.flightNumber }}</mat-cell>
+      <mat-cell *matCellDef="let row">{{ row.flightNumber }}
+      </mat-cell>
     </ng-container>
 
     <!-- Origin Column -->
     <ng-container matColumnDef="origin">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Origin</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.origin }}</mat-cell>
+      <mat-cell *matCellDef="let row">
+        <form
+          class="row-form"
+          *ngIf="isEditActive && editRowId === row.id; else notEditableContent"
+        >
+          <mat-form-field class="editable-input" appearance="fill">
+            <input matInput value="{{ row.origin }}" maxlength="25" #originRowInput />
+          </mat-form-field>
+        </form>
+        <ng-template #notEditableContent>{{ row.origin }}</ng-template>
+      </mat-cell>
     </ng-container>
 
     <!-- Destination Column -->
     <ng-container matColumnDef="destination">
       <mat-header-cell *matHeaderCellDef mat-sort-header>destination</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.destination }}</mat-cell>
+      <mat-cell *matCellDef="let row">
+        <form
+          class="row-form"
+          *ngIf="isEditActive && editRowId === row.id; else notEditableContent"
+        >
+          <mat-form-field class="editable-input" appearance="fill">
+            <input matInput value="{{ row.destination }}" #destinationRowInput />
+          </mat-form-field>
+        </form>
+        <ng-template #notEditableContent>{{ row.destination }}</ng-template>
+      </mat-cell>
     </ng-container>
 
     <!-- Depart Column -->
     <ng-container matColumnDef="depart">
       <mat-header-cell *matHeaderCellDef mat-sort-header>depart</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.depart | date: 'd/M/yy' }}</mat-cell>
+      <mat-cell *matCellDef="let row">
+        <form
+        class="row-form"
+        *ngIf="isEditActive && editRowId === row.id; else notEditableContent"
+      >
+      <mat-form-field appearance="fill">
+        <input matInput [matDatepicker]="picker1" [formControl]="departEditDate">
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+      </form>
+      <ng-template #notEditableContent>{{ row.depart | date: 'd/M/yy' }}</ng-template>
+      </mat-cell>
     </ng-container>
 
     <!-- Arrive Column -->
     <ng-container matColumnDef="arrive">
       <mat-header-cell *matHeaderCellDef mat-sort-header>arrive</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.arrive | date: 'd/M/yy' }}</mat-cell>
+      <mat-cell *matCellDef="let row">
+        <form
+        class="row-form"
+        *ngIf="isEditActive && editRowId === row.id; else notEditableContent"
+      >
+      <mat-form-field class="dataPicker" appearance="fill">
+        <input matInput [matDatepicker]="picker1" [formControl]="arriveEditDate">
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+      </form>
+      <ng-template #notEditableContent>{{ row.arrive | date: 'd/M/yy' }}</ng-template>
+      </mat-cell>
     </ng-container>
 
     <!-- IsNonstop Column -->
     <ng-container matColumnDef="isNonstop">
       <mat-header-cell *matHeaderCellDef mat-sort-header>isNonstop</mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <mat-icon>{{ row.isNonstop? 'done' :  'close'}}</mat-icon>
+        <mat-icon>{{ row.isNonstop ? 'done' : 'close' }}</mat-icon>
       </mat-cell>
     </ng-container>
     <!-- Edit Column -->
     <ng-container matColumnDef="edit">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <button mat-icon-button color="accent">
+        <button mat-icon-button (click)="openDialog(row)" color="accent">
           <mat-icon>edit</mat-icon>
         </button>
       </mat-cell>
@@ -76,7 +121,7 @@
     <ng-container matColumnDef="delete">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <button mat-icon-button color="warn">
+        <button mat-icon-button (click)="deleteRow(row)" color="warn">
           <mat-icon>delete</mat-icon>
         </button>
       </mat-cell>

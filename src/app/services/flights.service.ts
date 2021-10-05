@@ -45,7 +45,7 @@ export class FlightsService {
     return this.http.get(`${this.flightsApiUrl}/cities/destinations`);
   }
 
-  updateFlight(flight: Flight): Observable<any> {
+  updateFlight(flight: Flight): Observable<any> { 
     return this.http.patch(`${this.flightsApiUrl}/${flight.id}/update`, flight);
   }
 }

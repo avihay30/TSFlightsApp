@@ -1,0 +1,66 @@
+<!-- <div class="admin_panel"> -->
+<h1 mat-dialog-title>Update a Flight</h1>
+<div mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>origin:</mat-label>
+    <input
+      matInput
+      value="{{ newFlight.origin }}"
+      aria-label="Origin"
+      placeholder="Ex. Israel"
+      #originInput
+    />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>destination:</mat-label>
+    <input
+      matInput
+      value="{{ newFlight.destination }}"
+      aria-label="destination"
+      placeholder="Ex. NewYork"
+      #destinationInput
+    />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>flightNumber#:</mat-label>
+    <input
+      type="number"
+      matInput
+      value="{{ newFlight.flightNumber }}"
+      aria-label="flightNumber"
+      placeholder="Ex. 1536"
+      #flightNumInput
+    />
+  </mat-form-field>
+
+  <mat-form-field class="example-form-field" appearance="fill">
+    <mat-label>depart -> arrive</mat-label>
+    <mat-date-range-input
+      [formGroup]="dateRange"
+      [rangePicker]="dateRangePicker"
+      [comparisonStart]="dateRange.value.depart"
+      [comparisonEnd]="dateRange.value.arrive"
+    >
+      <input matStartDate placeholder="Depart date" formControlName="depart" />
+      <input matEndDate placeholder="Arrive date" formControlName="arrive" />
+    </mat-date-range-input>
+    <mat-datepicker-toggle matSuffix [for]="dateRangePicker"></mat-datepicker-toggle>
+    <mat-date-range-picker #dateRangePicker></mat-date-range-picker>
+  </mat-form-field>
+
+  <mat-checkbox
+    class="nonstop_box"
+    [checked]="newFlight.isNonstop"
+    (click)="toggleNonStop()"
+    >nonstop</mat-checkbox
+  >
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <button mat-button (click)="onYesClick()" [mat-dialog-close]="flight" cdkFocusInitial>
+    Ok
+  </button>
+</div>

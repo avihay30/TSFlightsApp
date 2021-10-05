@@ -7,6 +7,8 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MAT_SORT_DEFAULT_OPTIONS } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
@@ -23,6 +25,7 @@ import {
 } from 'rxjs/operators';
 import { Flight, FlightQuery } from '../model/flight.model';
 import { FlightsService } from '../services/flights.service';
+import { FlightEditDialogComponent } from './flight-edit-dialog/flight-edit-dialog.component';
 import { TestTableDataSource } from './test-table-datasource';
 
 @Component({
@@ -45,17 +48,24 @@ export class TestTableComponent implements AfterViewInit, OnInit {
     'delete',
   ];
 
+  // edit-table variables
+  isEditActive = false;
+  editRowId = -1;
+  departEditDate = new FormControl(new Date());
+  arriveEditDate = new FormControl(new Date());
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild('originInput') originInput!: ElementRef;
-  @ViewChild('destinationInput') destinationInput!: ElementRef;
+  @ViewChild('originInput') originSearchInput!: ElementRef;
+  @ViewChild('destinationInput') destinationSearchInput!: ElementRef;
   @ViewChild('searchBtn') searchBtn!: ElementRef;
+  @ViewChild('arriveRowInput') arriveRowInput!: ElementRef;
+  @ViewChild('destinationRowInput') destinationRowInput!: ElementRef;
 
   // old...
   flightsData: Flight[] = [];
   resultsLength = 0;
   isLoadingResults = true;
-
   @ViewChild(MatTable) table!: MatTable<Flight>;
 
   // constructor(
@@ -77,7 +87,11 @@ export class TestTableComponent implements AfterViewInit, OnInit {
   //   // );
   // }
 
-  constructor(private flightService: FlightsService, private route: ActivatedRoute) {}
+  constructor(
+    private flightService: FlightsService,
+    private route: ActivatedRoute,
+    public dialog: MatDialog,
+  ) {}
 
   ngOnInit() {
     // On ngOnInit @ViewChild component variables doesn't exists.
@@ -112,10 +126,16 @@ export class TestTableComponent implements AfterViewInit, OnInit {
   }
 
   loadFlightsPage(): void {
-    const query: FlightQuery = {
-      origin: this.originInput.nativeElement.value,
-      destination: this.destinationInput.nativeElement.value,
-    };
+    let query!: FlightQuery;
+    if (
+      this.originSearchInput !== undefined &&
+      this.destinationSearchInput !== undefined
+    ) {
+      query = {
+        origin: this.originSearchInput.nativeElement.value,
+        destination: this.destinationSearchInput.nativeElement.value,
+      };
+    }
 
     this.dataSource.loadFlights(
       query,
@@ -129,6 +149,43 @@ export class TestTableComponent implements AfterViewInit, OnInit {
     // server-side search
     this.paginator.firstPage();
     this.loadFlightsPage();
+  }
+
+  deleteRow(flight: Flight): void {
+    if (
+      window.confirm(`Are you sure you want to delete flight #${flight.flightNumber}?`)
+    ) {
+      this.flightService.deleteFlight(flight).subscribe((data) => {
+        if (data) {
+          this.loadFlightsPage();
+        }
+      });
+    }
+  }
+
+  openDialog(flightToEdit: Flight): void {
+    const dialogRef = this.dialog.open(FlightEditDialogComponent, {
+      width: '50%',
+      data: flightToEdit,
+    });
+
+    dialogRef.afterClosed().subscribe((editedFlight?: Flight) => {
+      if (editedFlight !== undefined) {
+        this.flightService.updateFlight(editedFlight).subscribe((data) => {
+          if (data) this.loadFlightsPage();
+        });
+      }
+    });
+  }
+
+  toggleEdit(flight: Flight): void {
+    this.isEditActive = !this.isEditActive;
+    this.editRowId = flight.id ? flight.id : -1;
+
+    // departEditDate = new FormControl(new Date());
+
+    this.departEditDate.setValue(flight.depart);
+    this.arriveEditDate.setValue(flight.arrive);
   }
 
   // refresh() {
