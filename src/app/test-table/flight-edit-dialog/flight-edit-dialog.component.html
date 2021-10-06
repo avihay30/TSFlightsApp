@@ -1,11 +1,10 @@
-<!-- <div class="admin_panel"> -->
 <h1 mat-dialog-title>Update a Flight</h1>
 <div mat-dialog-content>
   <mat-form-field appearance="fill">
     <mat-label>origin:</mat-label>
     <input
       matInput
-      value="{{ newFlight.origin }}"
+      [(ngModel)]="flight.origin"
       aria-label="Origin"
       placeholder="Ex. Israel"
       #originInput
@@ -16,7 +15,7 @@
     <mat-label>destination:</mat-label>
     <input
       matInput
-      value="{{ newFlight.destination }}"
+      [(ngModel)]="flight.destination"
       aria-label="destination"
       placeholder="Ex. NewYork"
       #destinationInput
@@ -28,7 +27,7 @@
     <input
       type="number"
       matInput
-      value="{{ newFlight.flightNumber }}"
+      [(ngModel)]="flight.flightNumber"
       aria-label="flightNumber"
       placeholder="Ex. 1536"
       #flightNumInput
@@ -50,17 +49,20 @@
     <mat-date-range-picker #dateRangePicker></mat-date-range-picker>
   </mat-form-field>
 
-  <mat-checkbox
-    class="nonstop_box"
-    [checked]="newFlight.isNonstop"
-    (click)="toggleNonStop()"
+  <mat-checkbox class="nonstop_box" labelPosition="before" [(ngModel)]="flight.isNonstop"
     >nonstop</mat-checkbox
   >
 </div>
 
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">No Thanks</button>
-  <button mat-button (click)="onYesClick()" [mat-dialog-close]="flight" cdkFocusInitial>
+  <button
+    mat-button
+    (click)="submit()"
+    mat-dialog-close
+    [disabled]="!formIsValid"
+    cdkFocusInitial
+  >
     Ok
   </button>
 </div>

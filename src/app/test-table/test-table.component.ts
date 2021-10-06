@@ -166,7 +166,7 @@ export class TestTableComponent implements AfterViewInit, OnInit {
   openDialog(flightToEdit: Flight): void {
     const dialogRef = this.dialog.open(FlightEditDialogComponent, {
       width: '50%',
-      data: flightToEdit,
+      data: { ...flightToEdit },
     });
 
     dialogRef.afterClosed().subscribe((editedFlight?: Flight) => {

@@ -1,16 +1,56 @@
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { formatDate } from '@angular/common';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  Injectable,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import {
+  DateAdapter,
+  MatDateFormats,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+  NativeDateAdapter,
+} from '@angular/material/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Flight } from 'src/app/model/flight.model';
+
+export const PICK_FORMATS: MatDateFormats = {
+  parse: { dateInput: { month: 'short', year: 'numeric', day: 'numeric' } },
+  display: {
+    dateInput: 'input',
+    monthYearLabel: { year: 'numeric', month: 'short' },
+    dateA11yLabel: { year: 'numeric', month: 'long', day: 'numeric' },
+    monthYearA11yLabel: { year: 'numeric', month: 'long' },
+  },
+};
+
+@Injectable()
+class PickDateAdapter extends NativeDateAdapter {
+  format(date: Date, displayFormat: Object): string {
+    if (displayFormat === 'input') {
+      return formatDate(date, 'dd/MM/yy', this.locale);
+    } else {
+      return date.toDateString();
+    }
+  }
+}
 
 @Component({
   selector: 'app-flight-edit-dialog',
   templateUrl: './flight-edit-dialog.component.html',
   styleUrls: ['./flight-edit-dialog.component.scss'],
+  providers: [
+    { provide: DateAdapter, useClass: PickDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: PICK_FORMATS },
+  ],
 })
 export class FlightEditDialogComponent implements OnInit {
-  newFlight: Flight;
   dateRange: FormGroup;
+  formIsValid = true;
 
   @ViewChild('originInput') originInput!: ElementRef;
   @ViewChild('destinationInput') destinationInput!: ElementRef;
@@ -20,31 +60,22 @@ export class FlightEditDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<FlightEditDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public flight: Flight,
   ) {
-    this.newFlight = flight;
     this.dateRange = new FormGroup({
-      depart: new FormControl(new Date(this.newFlight.depart)),
-      arrive: new FormControl(new Date(this.newFlight.arrive)),
+      depart: new FormControl(new Date(this.flight.depart)),
+      arrive: new FormControl(new Date(this.flight.arrive)),
     });
   }
 
   ngOnInit(): void {}
 
-  onYesClick(): void {
-    this.newFlight.origin = this.originInput.nativeElement.value;
-    this.newFlight.destination = this.destinationInput.nativeElement.value;
-    this.newFlight.flightNumber = this.flightNumInput.nativeElement.value;
-    this.newFlight.depart = this.dateRange.value.depart;
-    this.newFlight.arrive = this.dateRange.value.arrive;
+  submit(): void {
+    this.flight.depart = this.dateRange.value.depart;
+    this.flight.arrive = this.dateRange.value.arrive;
 
-    this.flight = this.newFlight;
+    this.dialogRef.close(this.flight);
   }
 
   onNoClick(): void {
     this.dialogRef.close();
-  }
-
-  // TODO: fix checkbox
-  toggleNonStop() {
-    this.newFlight.isNonstop = !this.newFlight.isNonstop;
   }
 }
