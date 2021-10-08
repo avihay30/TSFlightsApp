@@ -1,0 +1,67 @@
+<div class="admin_panel">
+  <h1>Add a flight</h1>
+  <mat-divider></mat-divider>
+  <form class="create_flight_form" [formGroup]="flightCreateForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill">
+      <mat-label>origin:</mat-label>
+      <input
+        matInput
+        formControlName="origin"
+        aria-label="Origin"
+        placeholder="Ex. Israel"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>destination:</mat-label>
+      <input
+        matInput
+        formControlName="destination"
+        aria-label="destination"
+        placeholder="Ex. NewYork"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>flightNumber#:</mat-label>
+      <input
+        type="number"
+        matInput
+        formControlName="flightNumber"
+        aria-label="flightNumber"
+        placeholder="Ex. 1536"
+      />
+    </mat-form-field>
+
+    <mat-form-field class="example-form-field" appearance="fill">
+      <mat-label>depart -> arrive</mat-label>
+      <mat-date-range-input
+        [formGroup]="flightCreateForm"
+        [rangePicker]="dateRangePicker"
+        [comparisonStart]="flightCreateForm.value.departDate"
+        [comparisonEnd]="flightCreateForm.value.arriveDate"
+      >
+        <input matStartDate placeholder="Depart date" formControlName="depart" />
+        <input matEndDate placeholder="Arrive date" formControlName="arrive" />
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="dateRangePicker"></mat-datepicker-toggle>
+      <mat-date-range-picker #dateRangePicker></mat-date-range-picker>
+    </mat-form-field>
+
+    <div class="nonstop_box">
+      <mat-label>nonstop:</mat-label>
+      <mat-slide-toggle formControlName="isNonstop"></mat-slide-toggle>
+    </div>
+
+    <!-- <mat-checkbox class="nonstop_box" labelPosition="before" formControlName="isNonStop"
+      >nonstop</mat-checkbox
+    > -->
+
+    <div class="btn_container">
+      <button mat-raised-button color="primary" type="submit" [disabled]="!formIsValid">
+        Create
+      </button>
+      <button mat-raised-button (click)="onClear()">Clear</button>
+    </div>
+  </form>
+</div>

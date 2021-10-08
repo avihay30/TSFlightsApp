@@ -1,0 +1,33 @@
+.admin_panel {
+  font-size: 1.1em;
+  color: #cccccc;
+  margin: 10px auto;
+  background-color: #424242;
+  border: 1px solid grey;
+  box-shadow: 2px 2px 2px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: space-around;
+  width: fit-content;
+  padding: 15px;
+  border-radius: 5px;
+
+  .create_flight_form {
+    margin: 10px 0 0; 
+  }
+
+  .nonstop_box {
+      display: flex;
+      flex-direction: column;
+  }
+
+  .btn_container {
+    display: flex;
+    justify-content: center;
+
+    button {
+      margin: 0 10px;
+    }
+  }
+}

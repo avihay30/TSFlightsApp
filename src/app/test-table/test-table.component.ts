@@ -35,6 +35,7 @@ import { TestTableDataSource } from './test-table-datasource';
   providers: [TestTableDataSource, { provide: 'flightsData', useValue: 'flightsData' }],
 })
 export class TestTableComponent implements AfterViewInit, OnInit {
+  flightToBeCreated!: Flight;
   flights!: Flight[];
   dataSource!: TestTableDataSource;
   displayedColumns = [
