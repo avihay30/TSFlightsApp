@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FlightCreateFormComponent } from './flight-create-form.component';
+import { FlightGeneralFormComponent } from './flight-general-form.component';
 
-describe('FlightCreateFormComponent', () => {
-  let component: FlightCreateFormComponent;
-  let fixture: ComponentFixture<FlightCreateFormComponent>;
+describe('FlightGeneralFormComponent', () => {
+  let component: FlightGeneralFormComponent;
+  let fixture: ComponentFixture<FlightGeneralFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FlightCreateFormComponent ]
+      declarations: [ FlightGeneralFormComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FlightCreateFormComponent);
+    fixture = TestBed.createComponent(FlightGeneralFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

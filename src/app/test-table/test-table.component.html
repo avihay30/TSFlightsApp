@@ -1,21 +1,28 @@
 <div class="mat-elevation-z8">
-  <app-flight-create-form></app-flight-create-form>
+  <!-- <app-flight-create-form></app-flight-create-form> -->
+
+  <app-flight-general-form
+    class="create-flight-form"
+    [title]="createFlightTitle"
+    (flightSubmit)="addNewFlight($event)"
+  >
+  </app-flight-general-form>
 
   <div class="filter-container">
-  <form class="filter-form">
-    <mat-form-field appearance="fill">
-      <mat-label>Search flight from</mat-label>
-      <input matInput placeholder="Ex. Israel" #originSearchInput />
-    </mat-form-field>
-    <mat-icon>arrow_forward</mat-icon>
-    <mat-form-field appearance="fill">
-      <mat-label>To</mat-label>
-      <input matInput placeholder="Ex. NewYork" #destinationSearchInput />
-    </mat-form-field>
+    <form class="filter-form">
+      <mat-form-field appearance="fill">
+        <mat-label>Search flight from</mat-label>
+        <input matInput placeholder="Ex. Israel" #originSearchInput />
+      </mat-form-field>
+      <mat-icon>arrow_forward</mat-icon>
+      <mat-form-field appearance="fill">
+        <mat-label>To</mat-label>
+        <input matInput placeholder="Ex. NewYork" #destinationSearchInput />
+      </mat-form-field>
 
-    <button mat-raised-button color="accent" (click)="searchFlights()">Search</button>
-  </form>
-</div>
+      <button mat-raised-button color="accent" (click)="searchFlights()">Search</button>
+    </form>
+  </div>
 
   <div class="spinner-container" *ngIf="dataSource.loading$ | async">
     <mat-spinner></mat-spinner>

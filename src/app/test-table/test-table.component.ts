@@ -1,32 +1,25 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Inject,
-  OnChanges,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, MAT_SORT_DEFAULT_OPTIONS } from '@angular/material/sort';
+import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
-import { fromEvent, merge, of as observableOf } from 'rxjs';
-import {
-  catchError,
-  debounceTime,
-  distinctUntilChanged,
-  map,
-  startWith,
-  switchMap,
-  tap,
-} from 'rxjs/operators';
+import { merge } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { Flight, FlightQuery } from '../model/flight.model';
 import { FlightsService } from '../services/flights.service';
 import { FlightEditDialogComponent } from './flight-edit-dialog/flight-edit-dialog.component';
 import { TestTableDataSource } from './test-table-datasource';
+
+
+// TODO: 1) Export logic to 2 separate components (admin + table).
+//       2) Add logic to search box + 
+//          logic in Backend for one-side search (e.g. query/israel/{empty}).
+//       3) Reuse the table in home component.
+//       4) Add auto-complete to search box according to DB origins/destinations.
+//       5) Add User login + JWT.
+//       6) consider removing resolver on admin(test-table).
 
 @Component({
   selector: 'app-test-table',
@@ -35,9 +28,10 @@ import { TestTableDataSource } from './test-table-datasource';
   providers: [TestTableDataSource, { provide: 'flightsData', useValue: 'flightsData' }],
 })
 export class TestTableComponent implements AfterViewInit, OnInit {
-  flightToBeCreated!: Flight;
+  flightToBeCreated: Flight;
   flights!: Flight[];
   dataSource!: TestTableDataSource;
+  createFlightTitle = 'Add a flight';
   displayedColumns = [
     'flightNumber',
     'origin',
@@ -92,7 +86,16 @@ export class TestTableComponent implements AfterViewInit, OnInit {
     private flightService: FlightsService,
     private route: ActivatedRoute,
     public dialog: MatDialog,
-  ) {}
+  ) {
+    this.flightToBeCreated = {
+      origin: '',
+      destination: '',
+      flightNumber: 0,
+      depart: new Date(),
+      arrive: new Date(),
+      isNonstop: false,
+    };
+  }
 
   ngOnInit() {
     // On ngOnInit @ViewChild component variables doesn't exists.
@@ -146,8 +149,14 @@ export class TestTableComponent implements AfterViewInit, OnInit {
     );
   }
 
+  addNewFlight(flight: Flight) {
+    this.flightService.postFlight(flight);
+    this.loadFlightsPage();
+  }
+
   searchFlights(): void {
     // server-side search
+    // TODO: add search here (call flights service)
     this.paginator.firstPage();
     this.loadFlightsPage();
   }

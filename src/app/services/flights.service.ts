@@ -29,7 +29,7 @@ export class FlightsService {
     return this.http.get(`${this.flightsApiUrl}/query/${origin}/${destination}`);
   }
 
-  postFlight(flight: Flight) {
+  postFlight(flight: Flight): {} {
     return this.http.post(this.flightsApiUrl, flight).subscribe(() => {});
   }
 

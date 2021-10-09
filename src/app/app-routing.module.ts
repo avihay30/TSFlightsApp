@@ -7,14 +7,14 @@ import { FlightsResolver } from './services/flights.resolver';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
-  { path: 'admin', component: AdminComponent },
   {
-    path: 'test',
+    path: 'admin',
     component: TestTableComponent,
     resolve: {
       flights: FlightsResolver,
     },
   },
+  { path: 'old-admin', component: AdminComponent },
 ];
 
 @NgModule({

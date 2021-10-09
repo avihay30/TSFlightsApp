@@ -1,0 +1,19 @@
+.base-form-layout {
+  margin-top: 10px;
+}
+
+.nonstop_box {
+  display: flex;
+  mat-slide-toggle {
+    padding-left: 5px;
+  }
+}
+
+.non-dialog-actions {
+  display: flex;
+  justify-content: center;
+
+  button {
+    margin: 0 10px;
+  }
+}

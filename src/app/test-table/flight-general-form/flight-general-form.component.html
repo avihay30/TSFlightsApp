@@ -1,7 +1,25 @@
-<div class="admin_panel">
-  <h1>Add a flight</h1>
+<div *ngIf="isDialog; else nonDialogLayout">
+  <h1 mat-dialog-title>{{ title }}</h1>
+  <div mat-dialog-content>
+    <ng-container *ngTemplateOutlet="baseFormLayout"></ng-container>
+  </div>
+  <span mat-dialog-actions>
+    <ng-container *ngTemplateOutlet="dialogActions"></ng-container>
+  </span>
+</div>
+
+<ng-template #nonDialogLayout>
+  <h1>{{ title }}</h1>
   <mat-divider></mat-divider>
-  <form class="create_flight_form" [formGroup]="flightCreateForm" (ngSubmit)="onSubmit()">
+  <div class="base-form-layout">
+    <ng-container *ngTemplateOutlet="baseFormLayout"></ng-container>
+  </div>
+  <ng-container *ngTemplateOutlet="nonDialogActions"></ng-container>
+</ng-template>
+
+<!-- Basic flight form -->
+<ng-template #baseFormLayout>
+  <form class="create_flight_form" [formGroup]="flightForm">
     <mat-form-field appearance="fill">
       <mat-label>origin:</mat-label>
       <input
@@ -36,10 +54,10 @@
     <mat-form-field class="example-form-field" appearance="fill">
       <mat-label>depart -> arrive</mat-label>
       <mat-date-range-input
-        [formGroup]="flightCreateForm"
+        [formGroup]="flightForm"
         [rangePicker]="dateRangePicker"
-        [comparisonStart]="flightCreateForm.value.departDate"
-        [comparisonEnd]="flightCreateForm.value.arriveDate"
+        [comparisonStart]="flightForm.value.departDate"
+        [comparisonEnd]="flightForm.value.arriveDate"
       >
         <input matStartDate placeholder="Depart date" formControlName="depart" />
         <input matEndDate placeholder="Arrive date" formControlName="arrive" />
@@ -52,16 +70,32 @@
       <mat-label>nonstop:</mat-label>
       <mat-slide-toggle formControlName="isNonstop"></mat-slide-toggle>
     </div>
-
-    <!-- <mat-checkbox class="nonstop_box" labelPosition="before" formControlName="isNonStop"
-      >nonstop</mat-checkbox
-    > -->
-
-    <div class="btn_container">
-      <button mat-raised-button color="primary" type="submit" [disabled]="!formIsValid">
-        Create
-      </button>
-      <button mat-raised-button (click)="onClear()">Clear</button>
-    </div>
   </form>
-</div>
+</ng-template>
+
+<ng-template #nonDialogActions>
+  <span class="non-dialog-actions">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="publishFlight()"
+      [disabled]="!formIsValid"
+    >
+      Create
+    </button>
+    <button mat-raised-button (click)="onClear()">Clear</button>
+  </span>
+</ng-template>
+
+<ng-template #dialogActions>
+  <button mat-button (click)="closeForm()">No Thanks</button>
+  <button
+    mat-button
+    (click)="publishFlight()"
+    mat-dialog-close
+    [disabled]="!formIsValid"
+    cdkFocusInitial
+  >
+    Ok
+  </button>
+</ng-template>
